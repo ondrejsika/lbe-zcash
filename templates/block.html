@@ -69,9 +69,12 @@
     <tr>
         <th>solution size (hex)</th>
         <td>{{ block.solution_size_hex }}</td>
-    </tr>
     <tr>
         <th>solution</th>
+        <td><input value="{{ block.solution }}"></td>
+    </tr>
+    <tr>
+        <th></th>
         <td>{% for chunk in block.solution_br %}{{ chunk }}<br>{% endfor %}</td>
     </tr>
     <tr>
