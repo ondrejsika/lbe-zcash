@@ -59,6 +59,22 @@
         <td>{{ block.bits }}</td>
     </tr>
     <tr>
+        <th>nonce</th>
+        <td>{{ block.nonce }}</td>
+    </tr>
+    <tr>
+        <th>solution size</th>
+        <td>{{ block.solution_size }}</td>
+    </tr>
+    <tr>
+        <th>solution size (hex)</th>
+        <td>{{ block.solution_size_hex }}</td>
+    </tr>
+    <tr>
+        <th>solution</th>
+        <td>{% for chunk in block.solution_br %}{{ chunk }}<br>{% endfor %}</td>
+    </tr>
+    <tr>
         <th>coinbase</th>
         <td>{{ coinbase.coinbase }}</td>
     </tr>

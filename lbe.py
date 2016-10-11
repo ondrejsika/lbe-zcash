@@ -6,10 +6,12 @@
 import argparse
 import binascii
 import datetime
+from StringIO import StringIO
 
 from flask import Flask, render_template
 from jsonrpc_requests import Server, TransportError, ProtocolError
 
+from utils import chunks, var_int_deserialize
 
 parser = argparse.ArgumentParser('LBE - Light Blockchain Explorer')
 parser.add_argument('HOST', type=str)
@@ -141,7 +143,30 @@ class Xcoind(object):
             'tx': tx,
         }
 
-xcoind = Xcoind(args.XCOIND_HOST, args.XCOIND_PORT, args.XCOIND_USER, args.XCOIND_PASSWORD, cache=DummyCache())
+
+class Zcashd(Xcoind):
+    def getblock(self, hash):
+        block = super(Zcashd, self).getblock(hash)
+        raw_block = self.rpc('getblock', hash, False)
+        block.update(self._parse_raw_block_header(raw_block))
+        return block
+
+    @staticmethod
+    def _parse_raw_block_header(header):
+        nonce = header[2*104:2*140]
+        solution_size = header[2*140:2*143]
+        solution = header[2*143:2*1487]
+
+        return {
+            'nonce': nonce,
+            'solution_size': var_int_deserialize(StringIO(binascii.unhexlify(solution_size))),
+            'solution_size_hex': solution_size,
+            'solution': solution,
+            'solution_br': chunks(solution, 128),
+        }
+
+
+xcoind = Zcashd(args.XCOIND_HOST, args.XCOIND_PORT, args.XCOIND_USER, args.XCOIND_PASSWORD, cache=DummyCache())
 
 app = Flask(__name__)
 app.debug = args.debug
