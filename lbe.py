@@ -164,6 +164,7 @@ class Zcashd(Xcoind):
             'solution_size_hex': solution_size_hex,
             'solution': solution,
             'solution_br': chunks(solution, 128),
+            'raw': header,
         }
 
 
