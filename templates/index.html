@@ -15,6 +15,7 @@
         <th>version (bin)</th>
         <th>difficulty</th>
         <th>bits</th>
+        <th>solution size</th>
     </tr>
 {% for block in blocks %}
 <tr>
@@ -30,6 +31,7 @@
     <td>{{ block.version_bin }}</td>
     <td>{{ block.difficulty }}</td>
     <td>{{ block.bits }}</td>
+    <td>{{ block.solution_size }}</td>
 </tr>
 {% endfor %}
 </table>
