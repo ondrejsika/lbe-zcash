@@ -155,12 +155,14 @@ class Zcashd(Xcoind):
     @staticmethod
     def _parse_raw_block_header(header):
         nonce = header[2*108:2*140]
+        nonce_text = ''.join([i if ord(i) < 128 else '.' for i in binascii.unhexlify(nonce)])
         solution_size_hex = header[2*140:2*143]
         solution_size_int = var_int_deserialize(StringIO(binascii.unhexlify(solution_size_hex)))
         solution = header[2*143:2*(143+solution_size_int)]
 
         return {
             'nonce': nonce,
+            'nonce_text': nonce_text,
             'solution_size': solution_size_int,
             'solution_size_hex': solution_size_hex,
             'solution': solution,
